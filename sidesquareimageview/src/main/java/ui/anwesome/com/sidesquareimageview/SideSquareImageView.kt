@@ -61,4 +61,22 @@ class SideSquareImageView(ctx:Context, var bitmap: Bitmap):View(ctx) {
             }
         }
     }
+    data class SideSquareImage(var bitmap : Bitmap) {
+        val state = State()
+        fun draw(canvas:Canvas, paint:Paint) {
+            val w = bitmap.width.toFloat()
+            val h = bitmap.height.toFloat()
+            canvas.save()
+            canvas.drawBitmap(bitmap, 0f, 0f, paint)
+            paint.color = Color.parseColor("#99212121")
+            canvas.drawRect(RectF(0f,0f,w/3,h), paint)
+            canvas.restore()
+        }
+        fun update(stopcb: (Float) -> Unit) {
+            state.update(stopcb)
+        }
+        fun startUpdating(startcb: () -> Unit) {
+            state.startUpdating(startcb)
+        }
+    }
 }
