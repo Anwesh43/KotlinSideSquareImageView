@@ -3,6 +3,7 @@ package ui.anwesome.com.sidesquareimageview
 /**
  * Created by anweshmishra on 16/02/18.
  */
+import android.app.Activity
 import android.content.*
 import android.graphics.*
 import android.view.*
@@ -68,6 +69,7 @@ class SideSquareImageView(ctx:Context, var bitmap: Bitmap):View(ctx) {
             val w = bitmap.width.toFloat()
             val h = bitmap.height.toFloat()
             canvas.save()
+            paint.color = Color.BLACK
             canvas.drawBitmap(bitmap, 0f, 0f, paint)
             paint.color = Color.parseColor("#99212121")
             canvas.drawRect(RectF(0f,0f,(w/3) * state.scale,h), paint)
@@ -102,6 +104,13 @@ class SideSquareImageView(ctx:Context, var bitmap: Bitmap):View(ctx) {
             sideSquareImage?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity: Activity, bitmap: Bitmap): SideSquareImageView {
+            val view = SideSquareImageView(activity,bitmap)
+            activity.setContentView(view)
+            return view
         }
     }
 }
