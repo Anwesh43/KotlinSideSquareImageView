@@ -69,7 +69,7 @@ class SideSquareImageView(ctx:Context, var bitmap: Bitmap):View(ctx) {
             canvas.save()
             canvas.drawBitmap(bitmap, 0f, 0f, paint)
             paint.color = Color.parseColor("#99212121")
-            canvas.drawRect(RectF(0f,0f,w/3,h), paint)
+            canvas.drawRect(RectF(0f,0f,(w/3) * state.scale,h), paint)
             canvas.restore()
         }
         fun update(stopcb: (Float) -> Unit) {
@@ -77,6 +77,30 @@ class SideSquareImageView(ctx:Context, var bitmap: Bitmap):View(ctx) {
         }
         fun startUpdating(startcb: () -> Unit) {
             state.startUpdating(startcb)
+        }
+    }
+    data class SideSquareImageRenderer(var view: SideSquareImageView, var time: Int = 0) {
+        var sideSquareImage: SideSquareImage ?= null
+        val animator = Animator(view)
+        fun render(canvas: Canvas, paint: Paint) {
+            if(time == 0) {
+                val w = canvas.width
+                val h = canvas.height
+                val bitmap = Bitmap.createScaledBitmap(view.bitmap, w, h, true)
+                sideSquareImage = SideSquareImage(bitmap)
+            }
+            sideSquareImage?.draw(canvas,paint)
+            time++
+            animator.animate {
+                sideSquareImage?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            sideSquareImage?.startUpdating {
+                animator.start()
+            }
         }
     }
 }
